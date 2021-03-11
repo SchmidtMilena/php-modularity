@@ -1,0 +1,28 @@
+{
+	"name" : "schmidtmilena/php-modularity",
+	"description": "Modular PHP Framework",
+	"keywords": [
+		"php-modularity",
+		"schmidtmilena"
+	],
+	"homepage": "https://github.com/SchmidtMilena/php-modularity",
+	"license": "MIT",
+	"authors": [{
+		"name": "Milena Schmidt",
+		"email": "milenaschmidt@protonmail.com",
+		"role": "Developer"
+	}],
+	"require": {
+		"php": "^7.4|^8.0"
+	},
+	"autoload": {
+		"psr-4": {
+			"PhpModularity\\": "src"
+		}
+	},
+	"autoload-dev": {
+		"psr-4": {
+			"PhpModularity\\Tests\\": "tests"
+		}
+	}
+}
