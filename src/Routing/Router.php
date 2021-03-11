@@ -37,6 +37,6 @@ class Router
             return (new $controller())->$method();
         }
 
-        throw new RuntimeException('No route find - controller');
+        throw new RuntimeException('No method find - controller');
     }
 }
