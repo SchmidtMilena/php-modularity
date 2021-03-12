@@ -5,22 +5,24 @@ declare(strict_types=1);
 namespace PhpModularity\Routing;
 
 use RuntimeException;
+use PhpModularity\Requests\Interfaces\RequestInterface;
 
 class Router
 {
-    protected array $routes;
+    private array $routes;
 
     public function __construct(array $routes)
     {
         $this->routes = $routes;
     }
 
-    public function direct(string $url)
+    public function direct(RequestInterface $request)
     {
-        $url = $this->getRoute($url);
+        $url = $this->getRoute($request->getUrl());
         if (array_key_exists($url, $this->routes)) {
             $route = $this->routes[$url];
-            return $this->action($route['controller'], $route['method'], $route['type']);
+            $parameters = $this->getRouteParameters($url, $route);
+            return $this->action($route['controller'], $route['method'], $route['type'], $parameters);
         }
 
         throw new RuntimeException('No route find - route');
@@ -28,10 +30,15 @@ class Router
 
     private function getRoute(string $url): string
     {
-        return trim($url, '/');
+        return htmlspecialchars(trim(parse_url($url, PHP_URL_PATH), '/'), ENT_QUOTES, 'utf-8');
     }
 
-    private function action(string $controller, string $method, string $type)
+    private function getRouteParameters(string $url, array $route): array
+    {
+        return [];
+    }
+
+    private function action(string $controller, string $method, string $type, array $parameters)
     {
         if (method_exists($controller, $method)) {
             return (new $controller())->$method();
@@ -39,4 +46,5 @@ class Router
 
         throw new RuntimeException('No method find - controller');
     }
+
 }
