@@ -8,7 +8,7 @@ use PDO;
 
 interface ConnectionInterface
 {
-    public function getPdo(): PDO;
+    public static function getPDOInstance(): PDO;
 }
 
 
