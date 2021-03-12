@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace PhpModularity\Repositories\Abstracts;
 
 use PDO;
-use PhpModularity\Database\Connection;
+use PhpModularity\Database\ConnectionRegistry;
 
 abstract class AbstractRepository
 {
@@ -14,7 +14,6 @@ abstract class AbstractRepository
 
     public function __construct()
     {
-        $connection = new Connection();
-        $this->pdo = $connection->getPdo();
+        $this->pdo = ConnectionRegistry::getPDOInstance();
     }
 }
