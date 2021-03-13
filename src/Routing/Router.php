@@ -13,10 +13,10 @@ class Router
     private array $routes;
     private AppDIContainer $container;
 
-    public function __construct(array $routes)
+    public function __construct(array $routes, AppDIContainer $container)
     {
         $this->routes = $routes;
-        $this->container = new AppDIContainer();
+        $this->container = $container;
     }
 
     public function direct(RequestInterface $request)
