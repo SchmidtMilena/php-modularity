@@ -6,7 +6,7 @@ namespace PhpModularity\Core\Config;
 
 use PhpModularity\Core\Config\Interfaces\DatabaseConfigInterface;
 
-class MySQLDatabaseConfig implements DatabaseConfigInterface
+class DatabaseConfig implements DatabaseConfigInterface
 {
     private const CONFIG_DIRECTORY = '/config/database.php';
 
