@@ -10,7 +10,7 @@ use PhpModularity\Core\Config\Interfaces\DatabaseConfigInterface;
 
 class Connection implements ConnectionInterface
 {
-    private PDO $pdo;
+    private ?PDO $pdo = null;
 
     public function __construct(DatabaseConfigInterface $config)
     {
@@ -18,7 +18,10 @@ class Connection implements ConnectionInterface
         $connectionString = $credentials['driver'] .
             ':host=' . $credentials ['host'] .
             ';dbname=' . $credentials ['database'];
-        $this->pdo = new PDO($connectionString, $credentials['username'], $credentials['password']);
+        if (!$this->pdo) {
+            $this->pdo = new PDO($connectionString, $credentials['username'], $credentials['password']);
+        }
+
     }
 
     public function getPdo(): PDO
