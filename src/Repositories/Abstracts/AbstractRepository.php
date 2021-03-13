@@ -6,16 +6,16 @@ namespace PhpModularity\Repositories\Abstracts;
 
 use PDO;
 use PhpModularity\Database\Connection;
-use PhpModularity\Core\Config\MySQLDatabaseConfig;
+use PhpModularity\Core\Config\DatabaseConfig;
 
 abstract class AbstractRepository
 {
     protected const FETCH_STYLE = PDO::FETCH_CLASS;
     protected PDO $pdo;
 
-    public function __construct()
+    public function __construct(DatabaseConfig $config)
     {
-        $connection = new Connection(new MySQLDatabaseConfig());
+        $connection = new Connection($config);
         $this->pdo = $connection->getPdo();
     }
 }
