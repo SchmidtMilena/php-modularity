@@ -5,15 +5,18 @@ declare(strict_types=1);
 namespace PhpModularity\Routing;
 
 use RuntimeException;
+use PhpModularity\Core\Container\AppDIContainer;
 use PhpModularity\Requests\Interfaces\RequestInterface;
 
 class Router
 {
     private array $routes;
+    private AppDIContainer $container;
 
     public function __construct(array $routes)
     {
         $this->routes = $routes;
+        $this->container = new AppDIContainer();
     }
 
     public function direct(RequestInterface $request)
@@ -41,7 +44,7 @@ class Router
     private function action(string $controller, string $method, string $type, array $parameters)
     {
         if (method_exists($controller, $method)) {
-            return (new $controller())->$method();
+            return ($this->container->resolve($controller))->$method();
         }
 
         throw new RuntimeException('No method find - controller');
