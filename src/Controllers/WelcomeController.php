@@ -8,9 +8,15 @@ use PhpModularity\Repositories\UserRepository;
 
 class WelcomeController
 {
+    private UserRepository $repository;
+
+    public function __construct(UserRepository $repository)
+    {
+        $this->repository = $repository;
+    }
+
     public function index()
     {
-        $users = new UserRepository();
-        return var_dump($users->fetchAll());
+        return var_dump($this->repository->fetchAll());
     }
 }
