@@ -4,18 +4,20 @@ declare(strict_types=1);
 
 namespace PhpModularity\Requests;
 
-use http\Exception\RuntimeException;
+use RuntimeException;
 use PhpModularity\Requests\Interfaces\RequestInterface;
 
 class BaseRequest implements RequestInterface
 {
-    private array $parameters;
+    private array $request;
     private string $url;
+    private string $type;
 
-    public function __construct(array $request, string $url)
+    public function __construct()
     {
-        $this->parameters = $request;
-        $this->url = $url;
+        $this->request = $_REQUEST;
+        $this->url = $_SERVER['REQUEST_URI'];
+        $this->type = $_SERVER['REQUEST_METHOD'];
     }
 
     public function getUrl(): string
@@ -23,11 +25,16 @@ class BaseRequest implements RequestInterface
         return $this->url;
     }
 
+    public function getType(): string
+    {
+        return $this->type;
+    }
+
     public function getParameter(string $parameter): array
     {
-        if (array_key_exists($parameter, $this->parameters)) {
+        if (array_key_exists($parameter, $this->request)) {
             return [
-                'parameter' => $this->parameters[$parameter]
+                'parameter' => $this->request[$parameter]
             ];
         }
         throw new RuntimeException('Invalid parameter');
@@ -37,8 +44,8 @@ class BaseRequest implements RequestInterface
     {
         $request = [];
         foreach ($parameters as $parameter) {
-            if (array_key_exists($parameter, $this->parameters)) {
-                $request[$parameter] = $this->parameters[$parameter];
+            if (array_key_exists($parameter, $this->request)) {
+                $request[$parameter] = $this->request[$parameter];
             }
         }
         return $request;
@@ -47,9 +54,9 @@ class BaseRequest implements RequestInterface
     public function except(array $parameters): array
     {
         $request = [];
-        $arrayParameters = array_diff($this->parameters, $parameters);
+        $arrayParameters = array_diff($this->request, $parameters);
         foreach ($arrayParameters as $parameter) {
-            $request[$parameter] = $this->parameters[$parameter];
+            $request[$parameter] = $this->request[$parameter];
         }
         return $request;
     }

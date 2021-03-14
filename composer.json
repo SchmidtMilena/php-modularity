@@ -15,8 +15,7 @@
 	"require": {
 		"php": "^7.4|^8.0",
 		"ext-pdo": "*",
-		"vlucas/phpdotenv": "^5.3",
-		"ext-http": "*"
+		"vlucas/phpdotenv": "^5.3"
 	}
 	,
 	"require-dev": {

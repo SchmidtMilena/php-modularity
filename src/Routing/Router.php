@@ -22,10 +22,10 @@ class Router
     public function direct(RequestInterface $request)
     {
         $url = $this->getRoute($request->getUrl());
-        if (array_key_exists($url, $this->routes)) {
-            $route = $this->routes[$url];
+        $route = $this->routes[$url];
+        if (array_key_exists($url, $this->routes) && $this->checkType($request, $route)) {
             $parameters = $this->getRouteParameters($url, $route);
-            return $this->action($route['controller'], $route['method'], $route['type'], $parameters);
+            return $this->action($route['controller'], $route['method'], $request->getType(), $parameters);
         }
 
         throw new RuntimeException('No route find - route');
@@ -33,11 +33,26 @@ class Router
 
     private function getRoute(string $url): string
     {
-        return htmlspecialchars(trim(parse_url($url, PHP_URL_PATH), '/'), ENT_QUOTES, 'utf-8');
+        $route = htmlspecialchars(trim(parse_url($url, PHP_URL_PATH), '/'), ENT_QUOTES, 'utf-8');
+        return $route === '' ? '/' : $route;
+    }
+
+    private function checkType(RequestInterface $request, array $route)
+    {
+        $requestType = $request->getType();
+        if (is_array($route['type'])) {
+            return in_array($request->getType(), $route['type'], true);
+        }
+
+        return $requestType === $route['type'];
     }
 
     private function getRouteParameters(string $url, array $route): array
     {
+        preg_match_all('/{(.*?)}/', key($route), $parameters);
+        if ($parameters[1]) {
+            return $parameters[1];
+        }
         return [];
     }
 
@@ -49,5 +64,4 @@ class Router
 
         throw new RuntimeException('No method find - controller');
     }
-
 }
