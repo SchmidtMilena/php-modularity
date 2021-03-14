@@ -19,4 +19,5 @@ class WelcomeController
     {
         return var_dump($this->repository->fetchAll());
     }
+
 }
