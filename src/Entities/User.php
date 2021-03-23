@@ -8,9 +8,9 @@ use PhpModularity\Entities\Interfaces\EntityInterface;
 
 class User implements EntityInterface
 {
-    private int $Id;
-    private string $Nazwa;
-    private string $Haslo;
+    private int $id;
+    private string $name;
+    private string $password;
     private const TABLE = 'users';
 
     public function getTableName(): string
